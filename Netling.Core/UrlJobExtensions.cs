@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -40,6 +41,8 @@ namespace Netling.Core
                 sw.Start();
                 var webRequest = (HttpWebRequest)WebRequest.Create(url);
                 webRequest.Headers[HttpRequestHeader.AcceptEncoding] = "gzip,deflate,sdch";
+                
+                AddMyStuff(webRequest);
 
                 using (var response = (HttpWebResponse)await webRequest.GetResponseAsync())
                 using (var stream = response.GetResponseStream())
@@ -55,6 +58,19 @@ namespace Netling.Core
             catch (Exception ex)
             {
                 return new UrlResult(startTime, url);
+            }
+        }
+
+        private static void AddMyStuff(HttpWebRequest webRequest)
+        {
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            const string inputData = "grant_type=password&client_id=CLIENTID&client_secret=CLIENTSECRET&username=USERNAME&password=PASSWORD&scope=psapi-userdata";
+
+            using (var reqStr = webRequest.GetRequestStream())
+            using (var reqSw = new StreamWriter(reqStr))
+            {
+                reqSw.WriteLine(inputData);
             }
         }
     }

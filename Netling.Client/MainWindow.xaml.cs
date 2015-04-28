@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Netling.Core;
 using Netling.Core.Models;
@@ -19,7 +22,11 @@ namespace Netling.Client
 
         public MainWindow()
         {
+            
             InitializeComponent();
+            Urls.Text = "https://preprod-innlogging.nrk.no/core/connect/token";
+            Threads.SelectedIndex = 0;
+            Duration.SelectedIndex = 0;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
